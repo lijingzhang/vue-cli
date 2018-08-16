@@ -1,0 +1,25 @@
+input::-webkit-outer-spin-button,  
+input::-webkit-inner-spin-button{  
+    -webkit-appearance: none !important;  
+    margin: 0;  
+}    
+.pl15{ padding-left: 15px;}
+.p15{padding: 15px;}
+.pl0{ padding-left: 0}
+.w100{width: 100%;}
+.inblock{ display: inline-block}
+.mb15{margin-bottom: 15px;}
+.tc{ text-align: center}
+.tr{text-align: right}
+.tl{text-align: left}
+
+.el-main{padding: 15px; padding-top: 40px;}
+
+
+
+
+
+
+
+
+
