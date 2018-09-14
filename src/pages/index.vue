@@ -1,118 +1,104 @@
 <template>
-  <div class="hello">
-    <v-header title="列表页">
-            <router-link slot="left" to="/">返回</router-link>
-             <router-link slot="right" to="/"> HOME</router-link>
-        </v-header>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-    	<v-footer ></v-footer>
+  <div class="wrapper" ref="wrapper">
+      <el-container  >
+    <v-header title="列表">
+        <span slot="left"  @click="$common.back()">返回</span>
+  
+    </v-header>
+      <el-main class="pt0"  >
+      <div class="news" v-for="news in dataArr">
+            <img :src="news.images.medium" alt="" class="news-image">
+            <div class="news-info">
+                <div class="news-title">{{ news.title }}</div>
+                <div class="news-remark">{{ news.year }}</div>
+            </div>
+        </div>
+         </el-main>
+      <v-footer></v-footer>
+      </el-container>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      dataArr:[],
+     
     }
+  },
+  created() {
+    this.loadData()
+  },
+
+  methods: {
+    loadData() {
+          this.$http.get('/top250?count=40').then(res => {
+            console.log(res.data)
+                
+                     this.dataArr=res.data.subjects;//必须置空数组，才能下拉刷新不重复
+                    // this.data = data;   
+                      for(let i = 0; i <data.length ; i++) {
+                        this.dataArr.push(data[i])
+                      }
+                    this.datalength=data.length;//赋值
+                  
+                }).catch((err) => {   //显示异常
+                    console.log(err);
+                });
+
+    },
+
+   
+
+  },
+
+
+  components: {
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style lang="scss">
+
+   .news {
+        display: flex;
+        align-items: stretch;
+        padding: 10px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    
+    .news:active {
+        background-color: #f3f3f3;
+    }
+
+    .news-image {
+        flex-shrink: 0;
+        width: 95px;
+        height: 62px;
+        display: block;
+        margin-right: 10px;
+    }
+
+    .news-info {
+        padding: 5px 0;
+        flex: 1;
+        display: flex;text-align: left;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .news-title {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.2;
+    }
+
+    .news-remark {
+        font-size: 12px;
+        color: #999;
+    }
+
+
 </style>

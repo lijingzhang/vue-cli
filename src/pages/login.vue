@@ -6,7 +6,7 @@
 		</v-header>
 		<el-main>
 			<div class=" pl0">
-					<div class="tc mb15"><img src="../images/logo.png" width="120"></div>
+					<div class="tc mb15"><img src="../assets/images/logo.png" width="120"></div>
 				<el-form ref="loginform" status-icon :model="loginform" :rules="rules" label-width="65px" >
 					<el-form-item label="用户名" prop="username">
 						<el-input v-model="loginform.username"  placeholder="请输入用户名" ></el-input>
