@@ -1,14 +1,52 @@
 <template>
 <div>
      <el-container  >
-      <v-header title="店铺列表">
-        <span slot="left"  @click="$common.back()">返回</span>
+      <v-header title="外卖">
+         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left "></i></span>
   
     </v-header>
     <div  class="comomtips" v-show="loadShow"><i class="el-icon-loading"></i></div>
     <el-main>
-        <div>
-            <i class="el-icon-location"></i>{{address.localaddress}}
+        <div class="pl10 pr10 pb15 pt15">
+            <el-row >
+                <el-col :span="10" >
+                    <div class="localaddress tl">
+                        <i class="el-icon-location "></i><span>{{address.localaddress}}</span> <i class="el-icon-arrow-right"></i>
+                    </div>
+                    
+                </el-col>
+                <el-col :span="14" class="pl10" >
+                    <div class="search tl">
+                        <i class="el-icon-search ml15 mr15"></i><span>请输入关键字..</span>
+                    </div>
+                    
+                </el-col>
+            </el-row>
+       
+        </div>
+           <div class="tabs">
+            <el-row >
+                <el-col :span="6">
+                    <router-link :to="{path:'/menu',query:{}}" >
+                        <span class="active">综合排序</span>
+                    </router-link>
+                </el-col>
+                 <el-col :span="6">
+                       <router-link :to="{path:'comment',query:{}}" >
+                        <span>销量最高</span>
+                    </router-link>
+                </el-col>
+                 <el-col :span="6">
+                      <router-link :to="{path:'/seller',query:{}}" >
+                        <span>距离最近</span>
+                    </router-link>
+                </el-col>
+                 <el-col :span="6">
+                      <router-link :to="{path:'/seller',query:{}}" >
+                        <span>筛选</span>
+                    </router-link>
+                </el-col>
+            </el-row>
         </div>
         <article>
                 <section v-for="(item,id) in dataArr" :key="item.id">
@@ -31,6 +69,10 @@
             </article>
     </el-main>
     <v-footer></v-footer>
+  <!-- 购物车图标 -->
+  <router-link to="/cart" class="cart">
+    <i></i><span>{{totalNum}}</span>
+  </router-link>
      </el-container>
 </div>
 </template>
@@ -47,30 +89,50 @@ export default{
        isAdd:false,
        lng:'',
        lat:'',
+       totalNum:0
       
       }
     },
     computed: {
-            ...mapGetters(['address']),  //获取getters返回的商家信息
+            ...mapGetters(['address','cartList']),  
         
         },
     created() {
-      let {lat, lng} = this.address;
-      if (lat && lng) {
-        this.dataArr = [];
-        this.Restaurants()
-      } else {
-        this.$store.dispatch('locationAddr');
-      }
-     
-    },
+        let {lat, lng} = this.address;
+        if (lat && lng) {
+             this.lat=lat;
+            this.lng=lng;
+            this.dataArr = [];
+            this.Restaurants()
+        } else {
+            this.$store.dispatch('locationAddr'); //地址为空时重定位
+            
+        }
+        let num=0;
+       let obj= Object.keys(this.cartList);  //对象转数组
+        obj.forEach((key) => {
+            if(Number(key)){
+                num+=this.cartList[key].totalNum
+            }
+        });
+   
   
+    this.totalNum=num
+    
+    },
+   watch: {
+      address(address) {  //监听地址为空时重定位之后重新加载列表
+        this.lat=address.lat;
+        this.lng=address.lng;
+        this.Restaurants()
+      }
+      }	,
     methods:{
 	 Restaurants() {
-        //   console.log(this.$store.state.address) //测试是否已获取值
         let limit=0;
         let offset=0;
-        let {lat, lng} = this.address;
+        let lat=this.lat;
+         let lng=this.lng;
          getRestaurants({limit,offset,lng,lat}).then(res => {
               this.loadShow=false;
                 this.dataArr=res.data.data; //获取店铺列表
@@ -129,5 +191,27 @@ export default{
               }
             }
           }
-        
+     .cart{ position: fixed;right: 10px;bottom: 15%;border: 1px solid #999;border-radius: 50%;display: inline-block;padding:8px;background:#fff;
+        i{display: inline-block; width: 30px;height: 30px;background: url('../../assets/images/cart.png') no-repeat;
+       background-size: contain;vertical-align:middle
+        }
+        span{ background: red;border-radius: 50%; width: 18px;height: 18px;text-align: center;line-height: 18px;display: inline-block;color: #fff;font-size: 12px;position: absolute;right:-2px;top:-2px;}
+     }   
+     .search{border-radius: 20px;background: #ededed;height: 30px;line-height: 30px;
+        span{font-size: 10px;}
+     }
+     .localaddress{background: #a6a6a6;color: #fff;border-radius: 20px;width: 100%;position: relative;
+        height: 30px;line-height: 30px;
+        span{ width: 74%;display: inline-block;padding-left:15%;
+            overflow: hidden;font-size: 10px;
+            white-space: nowrap;
+            text-overflow: ellipsis;}
+            i{ position: absolute}
+            .el-icon-location{ left: 5%;top: 8px;}
+            .el-icon-arrow-right{right: 5%;top:8px;}
+        }
+      .tabs{background: #fff;border-top:1px solid #f5f5f5;border-bottom:1px solid #f5f5f5;
+        a{padding: 10px 0; width: 100%;display:inline-block;border-bottom:2px solid #fff;text-align: center}
+        a.active{ color: #f7c36d; border-bottom:2px solid #f7c36d }
+    }
 </style>

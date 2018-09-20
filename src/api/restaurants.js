@@ -13,7 +13,7 @@ export const getRestaurants = (data) =>{
   // 获取餐馆详细信息
 export const getRestaurantInfo = (data) =>{
     let req = {
-      url:'/v1/restaurant/'+data.shopid
+      url:'v1/restaurant/'+data.shopid
     }
   
     return _get(req)
@@ -22,7 +22,7 @@ export const getRestaurantInfo = (data) =>{
    // 获取餐馆menu
 export const getRestaurantMenu = (data) =>{
     let req = {
-      url:'/v1/food/'+data.footid
+      url:'v1/food/'+data.footid
     }
   
     return _get(req)

@@ -17,7 +17,7 @@
             </el-row>
         </el-header>
          <!--导航 有3个路由  点菜 评价 和商家-->
-        <div class="tabs">
+          <div class="tabs">
             <el-row >
                 <el-col :span="8">
                     <router-link :to="{path:'/menu',query:{id:shopInfo.id}}" >
@@ -36,6 +36,7 @@
                 </el-col>
             </el-row>
         </div>
+       
         <!--点菜 评价 和商家-->
         <keep-alive >
             <router-view></router-view>

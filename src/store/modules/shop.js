@@ -12,7 +12,6 @@ const getters={
 
 const actions={
     getRestaurantInfo({commit,state},shopid){ //获取店铺详细信息  shopid为传参
-      
         getRestaurantInfo({shopid}).then(res => {
             if(res.data.status==1){
                 let shopInfo=res.data.data; 

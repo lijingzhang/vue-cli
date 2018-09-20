@@ -9,13 +9,17 @@ import Element from 'element-ui' //引入饿了么ui框架
 import 'element-ui/lib/theme-chalk/index.css'  //引入样式
 import './components/components.js' //加载公共组件脚本
 import './assets/scss/common.scss'                      //加载公共样式
+import common from './assets/js/common.js'            //加载公共脚本
 import axios from 'axios'  
 import store from './store'
 import * as filters from './assets/js/filters.js'  //过滤器
+import querystring from 'querystring'
 Vue.prototype.$http = axios
+Vue.prototype.$qs = querystring;
 Vue.use(Element);
 Vue.use(VueRouter)
 Vue.use(Vuex)
+Vue.prototype.$common = common
 Object.keys(filters).forEach(key => {  
   Vue.filter(key, filters[key])  
 })  

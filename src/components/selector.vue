@@ -1,7 +1,7 @@
 <template>
     <div class="selector">
-         <i class="el-icon-remove" @click="reduceCart() "></i>
-         <span >{{food_num}}</span>
+         <i class="el-icon-remove" v-if="food_num>0" @click="reduceCart() "></i>
+         <span v-if="food_num>0">{{food_num}}</span>
          <i  class="el-icon-circle-plus" @click="addCart()"></i>
     </div>
 </template>
@@ -12,14 +12,20 @@
         props: ['food_id', 'name', 'price', 'pic'],
         methods:{
             addCart(){
-                let pic_url = this.shopInfo;   //商店名字 图片
-                let shopname = this.shopInfo.name;
+              
                 this.$store.dispatch('addCart', {
-                    shopname,
-                    pic_url,
+                    shopname:this.shopInfo.name,
+                    pic_url: this.shopInfo.pic_url,
                     name: this.name,
                     price: this.price,
                     foods_pic: this.pic,
+                    food_id: this.food_id,
+                    shopid: this.shopInfo.id,
+                })
+               
+            },
+             reduceCart(){
+                this.$store.dispatch('reduceCart', {
                     food_id: this.food_id,
                     shopid: this.shopInfo.id,
                 })

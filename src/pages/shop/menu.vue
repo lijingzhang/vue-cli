@@ -2,7 +2,7 @@
 	<div class="menu_body" >
      
         <el-aside   ref="aside">
-            <ul class="menu"> <!--默认打开第几个-->
+            <ul class="menu"> 
                 <li v-for="(item,index) in shopMenu" :key="item.id"><router-link to="/">{{item.name}}</router-link></li>
             </ul>
         </el-aside>
@@ -47,7 +47,7 @@
                          <span>￥{{totalPrice}}</span>
                     </el-col>
                     <el-col :span="10">
-                        <div class="btn" >结 算</div>
+                        <div class="btn" ><router-link :to="'/orderConfirm?shopid='+shopid"> 结 算</router-link></div>
                     </el-col>
                 </el-row>
                  

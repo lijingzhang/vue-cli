@@ -2,7 +2,7 @@
 	<div >
 	<el-container  style="height: 100%;margin-top:45px;">
         <v-header title="分类">
-			<span slot="left"  @click="$common.back()">返回</span>
+			  <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
 		</v-header>
       
       

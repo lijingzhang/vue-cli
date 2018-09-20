@@ -33,20 +33,7 @@ export default {
 
   methods: {
     loadData() {
-          this.$http.get('/top250?count=40').then(res => {
-            console.log(res.data)
-                
-                     this.dataArr=res.data.subjects;//必须置空数组，才能下拉刷新不重复
-                    // this.data = data;   
-                      for(let i = 0; i <data.length ; i++) {
-                        this.dataArr.push(data[i])
-                      }
-                    this.datalength=data.length;//赋值
-                  
-                }).catch((err) => {   //显示异常
-                    console.log(err);
-                });
-
+         
     },
 
    

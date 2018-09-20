@@ -11,13 +11,17 @@ import shopList from '@/pages/shop/shopList'
 import seller from '@/pages/shop/seller' 
 import comment from '@/pages/shop/comment' 
 import menu from '@/pages/shop/menu' 
+import orderConfirm from '@/pages/order/order_confirm' 
+import address from '@/pages/order/address' 
+import add_address from '@/pages/order/add_address'
+import pay from '@/pages/order/pay'
 
-
+import cart from '@/pages/cart/cart'
 
 export default[
     {
       path: '/',
-      redirect: '/index'   // 当访问根目录的时候默认跳转到主页
+      redirect: '/login'   // 当访问根目录的时候默认跳转到主页
     },
 
     {
@@ -59,6 +63,31 @@ export default[
       component: shopList,
      
     },
+    {
+      path: '/orderConfirm',
+      component: orderConfirm,
+      children: [
+        {path: '/address',component: address}, 
+      ]
+     
+    },
+  
+    {
+      path: '/add_address',
+      component: add_address,
+     
+    },
+    {
+      path: '/pay',
+      component: pay,
+     
+    },
+    {
+      path: '/cart',
+      component: cart,
+     
+    },
     
+
   ]
 

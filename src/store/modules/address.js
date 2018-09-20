@@ -1,15 +1,17 @@
 import * as types from '../mutation-types'
-import {location} from '@/api/location'
+import {location,all_address} from '@/api/location'
 const state={
     address:{
         address:'定位中...',
         lat: '',
         lng: '',
     },
+    deliveryAddress: {}
 }
 
 const getters={
     address:state=>state.address,
+    deliveryAddress:state=>state.deliveryAddress,
 }
 
 const actions={
@@ -21,13 +23,19 @@ const actions={
             }
         })
     },
+    selectAddr({commit,state},address){ //选定的地址
+        commit(types.SELECT_ADDRESS,address)//保存选定的地址到VUEX中
+    },
     
 }
 
 const mutations={
     [types.RECORD_ADDRESS](state,localaddress){  
        state.address={...localaddress}   //地址真正赋值给location
-    }
+    },
+    [types.SELECT_ADDRESS](state,address){  
+        state.deliveryAddress={...address}   
+     },
 }
 
 export default{

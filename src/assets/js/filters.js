@@ -2,10 +2,8 @@
 
 //保留4位小数
 let tofix = value => {
-   return value.toFixed(4)
+   return value.toFixed(2)
   }
-
-
 
   //截取字符串 
   let MaxLength=value=> {
@@ -14,5 +12,15 @@ let tofix = value => {
        }
         return value;
 } 
-  export { tofix,MaxLength}
+//男士女士
+let gender = value => {
+  if(value=="male"){
+    return "女士"
+  }
+  else{
+    return "男士"
+  }
+ }
+
+  export { tofix,MaxLength,gender}
 //export { evenNumbers, capitalize }
