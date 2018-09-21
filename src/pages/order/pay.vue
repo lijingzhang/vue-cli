@@ -4,9 +4,9 @@
       <v-header title="支付订单">
         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
     </v-header>
-    <!-- <div class="popContainer" v-show="loadShow">
+    <div class="popContainer" v-show="loadShow">
           <div  class="comomtips" >支付超时</div>
-    </div> -->
+    </div>
   
     <el-main>
         <div class="tc p15 mb15">

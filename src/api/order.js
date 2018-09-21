@@ -10,7 +10,7 @@ export const postOrder = (data) =>{
     return _post(req)
   }
 
-  // 提交订单
+  // 支付页面获取订单信息 // 获取历史订单详细页
 export const getOrder = (data) =>{
     let req = {
       url:'v1/order/'+data
@@ -20,6 +20,14 @@ export const getOrder = (data) =>{
   }
 
 
+  // 获取历史订单
+  export const getOrderList = (data) =>{
+    let req = {
+      url:'v1/orders'
+    }
+  
+    return _get(req)
+  }
 
 
 

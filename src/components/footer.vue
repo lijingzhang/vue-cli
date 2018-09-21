@@ -1,8 +1,9 @@
 <template>
 	<footer class="footer">
 		<el-row :gutter="20">
-			<el-col :span="12"><router-link to="/index"><i class="home"></i>首页</router-link></el-col>
-			<el-col :span="12" ><router-link to="/centerindex"><i class="my"></i>我的</router-link></el-col>
+			<el-col :span="8"><router-link to="/shopList"><i class="home"></i>首页</router-link></el-col>
+			<el-col :span="8" ><router-link to="/orderList"><i class="el-icon-tickets f26"></i>订单</router-link></el-col>
+			<el-col :span="8" ><router-link to="/centerindex"><i class="my"></i>我的</router-link></el-col>
 		</el-row>
 	</footer>
 </template>

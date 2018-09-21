@@ -1,53 +1,6 @@
 <template>
 <div>
-     <el-container  >
-      <v-header title="外卖">
-         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left "></i></span>
-  
-    </v-header>
-    <div  class="comomtips" v-show="loadShow"><i class="el-icon-loading"></i></div>
-    <el-main>
-        <div class="pl10 pr10 pb15 pt15">
-            <el-row >
-                <el-col :span="10" >
-                    <div class="localaddress tl">
-                        <i class="el-icon-location "></i><span>{{address.localaddress}}</span> <i class="el-icon-arrow-right"></i>
-                    </div>
-                    
-                </el-col>
-                <el-col :span="14" class="pl10" >
-                    <div class="search tl">
-                        <i class="el-icon-search ml15 mr15"></i><span>请输入关键字..</span>
-                    </div>
-                    
-                </el-col>
-            </el-row>
-       
-        </div>
-           <div class="tabs">
-            <el-row >
-                <el-col :span="6">
-                    <router-link :to="{path:'/menu',query:{}}" >
-                        <span class="active">综合排序</span>
-                    </router-link>
-                </el-col>
-                 <el-col :span="6">
-                       <router-link :to="{path:'comment',query:{}}" >
-                        <span>销量最高</span>
-                    </router-link>
-                </el-col>
-                 <el-col :span="6">
-                      <router-link :to="{path:'/seller',query:{}}" >
-                        <span>距离最近</span>
-                    </router-link>
-                </el-col>
-                 <el-col :span="6">
-                      <router-link :to="{path:'/seller',query:{}}" >
-                        <span>筛选</span>
-                    </router-link>
-                </el-col>
-            </el-row>
-        </div>
+    
         <article>
                 <section v-for="(item,id) in dataArr" :key="item.id">
                     <router-link :to="{path:'/menu',query:{id:item.id}}">
@@ -67,13 +20,7 @@
                 </section>
                 
             </article>
-    </el-main>
-    <v-footer></v-footer>
-  <!-- 购物车图标 -->
-  <router-link to="/cart" class="cart">
-    <i></i><span>{{totalNum}}</span>
-  </router-link>
-     </el-container>
+
 </div>
 </template>
 
@@ -89,9 +36,8 @@ export default{
        isAdd:false,
        lng:'',
        lat:'',
-       totalNum:0,
-        noMore: false,        //没有更多数据了
-        preventRepeat: false   //避免重复请求
+       totalNum:0
+      
       }
     },
     computed: {
@@ -130,9 +76,6 @@ export default{
       }	,
     methods:{
 	 Restaurants() {
-        if (this.noMore || this.preventRepeat)
-          return;
-        this.preventRepeat = true;
         let limit=0;
         let offset=0;
         let lat=this.lat;

@@ -2,7 +2,7 @@
 	<div >
 	<el-container class="pb0" >
         <v-header :title="shopInfo.name">
-			<span slot="left"  @click="$common.back()">返回</span>
+			<router-link slot="left"  to="/shopList">返回</router-link>
 		</v-header>
         <!-- 头部商家详情 -->
          <el-header>
