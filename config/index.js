@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/', 
     proxyTable: {
     //   '/api': {    //将www.exaple.com印射为/api
     //     target: 'http://39.108.3.12:3000',  // 接口域名
@@ -22,7 +22,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    // host: 'localhost', // can be overwritten by process.env.HOST
+    host: 'localhost', // can be overwritten by process.env.HOST
     port: 8084, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
@@ -52,7 +52,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './', //npm run build打包前需要修改的地方
 
     /**
      * Source Maps

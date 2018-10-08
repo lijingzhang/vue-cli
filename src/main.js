@@ -14,6 +14,9 @@ import axios from 'axios'
 import store from './store'
 import * as filters from './assets/js/filters.js'  //过滤器
 import querystring from 'querystring'
+import VueScroller from 'vue-scroller'        //下拉
+
+Vue.use(VueScroller)
 Vue.prototype.$http = axios
 Vue.prototype.$qs = querystring;
 Vue.use(Element);

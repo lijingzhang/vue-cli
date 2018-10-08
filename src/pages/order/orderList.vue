@@ -2,10 +2,11 @@
 <div>
      <el-container  >
       <v-header title="订单">
-         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
     <div  class="comomtips" v-show="loadShow"><i class="el-icon-loading"></i></div>
     <el-main>
+        <div class="gray p15" v-if="dataArr.length==0">--- 暂无订单 ---</div>
          <div class="list_group border-t10" v-for="(item,id) in dataArr" :key="item.id">
              <router-link :to='"/orderShow?id="+item.id'>
                 <div class="list_head"><img :src="item.restaurant.pic_url" width="30" class="pr10 l">{{item.restaurant.name}} > <span class="green">{{item.status}}</span></div>

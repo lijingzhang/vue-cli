@@ -15,6 +15,7 @@ import menu from '@/pages/shop/menu'
 import orderConfirm from '@/pages/order/order_confirm' 
 import address from '@/pages/order/address' 
 import add_address from '@/pages/order/add_address'
+import addLocation from '@/pages/order/add_location'
 import pay from '@/pages/order/pay'
 import orderList from '@/pages/order/orderList'
 import orderShow from '@/pages/order/orderShow'
@@ -22,6 +23,10 @@ import orderShow from '@/pages/order/orderShow'
 import cart from '@/pages/cart/cart'
 
 import centerindex from '@/pages/center/index'
+
+import location from '@/pages/search/location'
+import search from '@/pages/search/search'
+
 export default[
     {
       path: '/',
@@ -81,6 +86,9 @@ export default[
     {
       path: '/add_address',
       component: add_address,
+      children: [
+        {path: '/addLocation',component: addLocation}, 
+      ]
      
     },
     {
@@ -106,6 +114,16 @@ export default[
     {
       path: '/orderShow',
       component: orderShow,
+     
+    },
+    {
+      path: '/search',
+      component: search,
+     
+    },
+    {
+      path: '/location',
+      component: location,
      
     },
     

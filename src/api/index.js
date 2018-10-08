@@ -32,3 +32,8 @@ export const _get = (req) => {
 export const _post = (req) => {
   return axios({method: 'post', url: `/${req.url}`, data: req.data})
 }
+
+//post and no withCredentials
+export const _postNoWithCredentials = (req) => {
+  return axios({method: 'post', url: `/${req.url}`, data: req.data,withCredentials:false})
+}

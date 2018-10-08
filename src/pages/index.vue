@@ -2,7 +2,7 @@
   <div class="wrapper" ref="wrapper">
       <el-container  >
     <v-header title="列表">
-        <span slot="left"  @click="$common.back()">返回</span>
+        <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
   
     </v-header>
       <el-main class="pt0"  >

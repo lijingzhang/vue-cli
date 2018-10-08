@@ -2,7 +2,6 @@
 	<div>
 	<el-container>
 		<v-header title="登录">
-			<router-link slot="left" to="/">返回</router-link>
 		</v-header>
 		<el-main>
 			<div class=" pl0">

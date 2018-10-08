@@ -2,7 +2,8 @@
 <div id="popView">
      <el-container  >
       <v-header title="支付订单">
-        <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+          <!-- <router-link to="/cart" slot="left" ><i class="el-icon-arrow-left f16"></i></router-link> -->
+          <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
     <div class="popContainer" v-show="loadShow">
           <div  class="comomtips" >支付超时</div>
@@ -48,7 +49,7 @@
                 </el-col>
             </el-row>
             <div class="p15 mt30">
-                 <el-button type="primary" class="w100">确认支付</el-button>
+                 <el-button type="primary" class="w100" @click="conformPay()">确认支付</el-button>
             </div>
            
     </el-main>
@@ -79,7 +80,7 @@ export default{
       this.orderInfo();
         
     },
-  
+   
     methods:{
         select(value){
            this.current=value
@@ -90,6 +91,7 @@ export default{
             getOrder(order_id).then(res => {
                 if(res.data.status==200){
                    this.dataArr=res.data.data
+                   console.log(this.dataArr)
                    this.restaurant=res.data.data.restaurant
                    this.total_price=(this.dataArr.total_price).toFixed(2)
                    let remain_time =res.data.data.pay_remain_time;    //支付剩余时间
@@ -107,6 +109,21 @@ export default{
             }).catch((err) => {   //显示异常
                 console.log(err);
             });
+        },
+        conformPay(){   //确认支付
+            // let restaurant_id=this.dataArr.restaurant_id
+            //   let obj= Object.keys(this.dataArr.foods);  //对象转数组
+            // obj.forEach((key) => {
+            //     if(Number(key)){
+            //         console.log(restaurant_id,key)
+            //         this.$store.dispatch('deleteFood', {
+            //         shopid: restaurant_id,
+            //         food_id: key,
+            //     })
+                   
+            //     }
+            // });
+            
         },
           calc_remain_time(remain_time) {   //倒计时
             let minutes = (remain_time / 60 % 60)

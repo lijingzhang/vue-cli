@@ -2,9 +2,14 @@
 	<div >
         <el-container  >
         <v-header title="个人中心"></v-header>
+          <div  class="comomtips" v-show="loadShow"><i class="el-icon-loading"></i></div>
         <el-main>
             <div class="p15 tl">
-                <img :src="dataArr.avatar" class="headimg " > <span>{{dataArr.username}}</span>
+                 <label class="avatar" for="file">
+                    <img :src="avatar" class="headimg ">
+                    <input id="file" type="file" accept="image/*" mutiple="mutiple" @change="fileUpload($event)" style="display: none;">
+                </label>
+                <span>{{dataArr.username}}</span>
             </div>
             <el-row class="mb15 border-t10">
                 <el-col :span="6" class="mt15" v-for="(item,id) in myFunList" :key="id">
@@ -44,11 +49,15 @@
     </div>
 </template>
 <script>
-  import {userInfo} from '@/api/user'
+    import {userInfo} from '@/api/user'
+    import {uploadToken, upload,changeAvatar} from '@/api/upload'
+    import config from '@/config'
     export default {
         data() {
             return {
                 dataArr:[],
+                loadShow:false,
+                avatar:'',
                 myFunList: [
                 {
                     url: '/centerindex',
@@ -126,11 +135,35 @@
                userInfo().then(res => {
                 this.loadShow=false;
                     this.dataArr=res.data.data; //获取个人信息
-                
+                    this.avatar = res.data.data.avatar;
                 }).catch((err) => {   //显示异常
                     console.log(err);
                 });
-          }
+          },
+           fileUpload(event) {
+            this.loadShow = true;
+            let file = event.target.files[0];
+            if (file.size > 1024 * 1024 * 3) {    //只能传2M以内照片
+            this.alertText = '上传失败，只能传2M以内图片'
+            this.showTip = true;
+            } else {
+            uploadToken().then((response) => {   //获取上传凭证
+                if (response.data.status === 200) {
+                let data = {token: response.data.uptoken, file}
+                upload(data).then((upResponse) => {   //获取上传key
+                    let pic_url = config.domain + upResponse.data.key
+                    this.avatar = pic_url;
+                    this.loadShow = false;
+                    changeAvatar({pic_url}).then((updateResponse) => {  //更改头像
+                    })     //更新到数据库
+                })
+                } else {
+                this.alertText = response.data.message
+                this.showTip = true;
+                }
+            })
+            }
+        },
 
       }
 		

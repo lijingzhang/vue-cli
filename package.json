@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "better-scroll": "^1.11.1",
     "element-ui": "^2.4.4",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-scroller": "^2.2.4",
     "vuex": "^2.5.0"
   },
   "devDependencies": {

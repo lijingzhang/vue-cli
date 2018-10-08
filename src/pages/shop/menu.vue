@@ -1,37 +1,45 @@
 <template>
 	<div class="menu_body" >
-     
-        <el-aside   ref="aside">
-            <ul class="menu"> 
-                <li v-for="(item,index) in shopMenu" :key="item.id"><router-link to="/">{{item.name}}</router-link></li>
+          <div class="menu-wrapper" ref="menuWrapper">
+        <ul  class="menu">
+          <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"
+              @click="selectMenu(index,$event)" :key="index">
+          <span class="text border-1px-bottom">
+            <span  class="icon" ></span>{{item.name}}
+          </span>
+          </li>
+        </ul>
+      </div>
+       <div class="foods-wrapper" ref="foodsWrapper">
+        <ul>
+          <li v-for="(item, listIndex) in goods" class="food-list" ref="foodList" :key="listIndex">
+            <h3 class="title">{{item.name}}</h3>
+            <ul>
+              <li 
+                v-for="(obj, foodIndex) in item.spus"
+                :key="foodIndex"
+                class="food-item" >
+                <div class="icon">
+                  <img  width="50" height="50" :src="obj.pic_url">
+                </div>
+               <div class="info">
+                    <div class="name">{{ obj.name | MaxLength}}</div>
+                    <div class="sell-num">月售：{{ obj.month_saled_content }}</div>
+                    <div class="price mt5"> ￥{{ obj.skus[0].price }}</div>
+                    <selector 
+                    :name="obj.name"
+                    :food_id="obj.skus[0].id"
+                    :price="obj.skus[0].price"
+                    :pic="obj.pic_url"
+                    >
+                    </selector>
+                    
+                </div>
+              </li>
             </ul>
-        </el-aside>
-  
-        <el-container class="pb0 right" ref="right">
-            <el-main class="pt0">
-                <article v-for="menu in shopMenu" >
-                    <h3 class="title">{{menu.name}}</h3>
-                    <section v-for="obj in menu.spus" >
-                        <div class="img">
-                            <img  :src="obj.pic_url" width="50">
-                        </div>
-                        <div class="info">
-                            <div class="name">{{ obj.name | MaxLength}}</div>
-                            <div class="sell-num">月售：{{ obj.month_saled_content }}</div>
-                            <div class="price mt5"> ￥{{ obj.skus[0].price }}</div>
-                            <selector 
-                            :name="obj.name"
-                            :food_id="obj.skus[0].id"
-                            :price="obj.skus[0].price"
-                            :pic="obj.pic_url"
-                            >
-                            </selector>
-                           
-                        </div>
-                    </section>
-                </article>
-            </el-main>
-        </el-container>
+          </li>
+        </ul>
+      </div>
  
   	<footer>
 		<el-row >
@@ -60,42 +68,97 @@
 </div>
 </template>
 <script>
+  import BScroll from 'better-scroll'
  import {mapGetters} from 'vuex'
  import selector from '../../components/selector.vue'
+import {getRestaurantMenu} from '@/api/restaurants'
     export default {
         data() {
             return {
-             windowHeight:0,
-             shopid:0
+             shopid:0,
+             menuIndex: 0,   //左侧当前是第几个分类
+             listHeight: [], //存储区块的高度
+             scrollY:0,
+             goods:[]
             }
         },
          computed: {
-            ...mapGetters(['shopMenu','cartList','shopInfo']),  
+            ...mapGetters(['cartList','shopInfo']),  
              totalPrice() {  //计算购物车总价格
                 return this.cartList[this.shopid] ? this.cartList[this.shopid].totalPrice : 0;
             },
             totalNum(){      //商品数量
                   return this.cartList[this.shopid] ? this.cartList[this.shopid].totalNum : 0;
-            }
+            },
+
+            currentIndex () {
+                for (let i = 0; i < this.listHeight.length; i++) {
+                let height1 = this.listHeight[i]
+                let height2 = this.listHeight[i + 1]
+                if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+                    return i
+                }
+                }
+                return 0
+            },
+           
+            
         },
         created(){
             this.shopid=this.$route.query.id;  //通过路由获取id
               //根据商店id获取店家menu
-             this.$store.dispatch('getRestaurantMenu',  this.shopid); //触发执行actions中的方法
-             this.windowHeight = window.innerHeight-196;       //获取设备显示高度减去头尾
-            this.$nextTick(() => {       //初始化better-scroll
-            this.$refs.aside.$el.setAttribute('style','max-height:'+this.windowHeight+'px');
-            this.$refs.right.$el.setAttribute('style','max-height:'+this.windowHeight+'px');
-        });
-       
+             getRestaurantMenu(this.shopid).then(response=>{
+                  this.goods = response.data.data;
+                    this.$nextTick(() => {           //调用scroll函数，实现滚动    
+                    this._initScroll();          //拿到数据以后计算高度        
+                    this._calculateHeight();       
+                 }); 
+            
+                })
         },
-       
+     
 		methods:{
+            selectMenu (index, event) {
+            
+                if (!event._constructed) {
+                return
+                }
+            
+                let foodList = this.$refs.foodList
+                
+                let el = foodList[index]
+                console.log(el)
+                this.foodsScroll.scrollToElement(el, 300)
+            },
+                // new BScroll(接收一个dom， 一个options)
+            _initScroll () {
+            
+                this.meunScroll = new BScroll(this.$refs.menuWrapper, {
+                click: true
+                })
 
-          
+                this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+                click: true,
+                probeType: 3 // api表示在滚动的时候能实时的告诉当前位置，y坐标
+                })
 
-		
-        },
+                // 利用这个api监听scroll，得到y坐标
+                this.foodsScroll.on('scroll', (pos) => {
+                this.scrollY = Math.abs(Math.round(pos.y)) // 是小数，需要转换整数，并且要是正数
+                })
+            },
+            _calculateHeight () { // 获取右侧商品 每一组的高度
+                let foodList = this.$refs.foodList
+                let height = 0
+                this.listHeight.push(height)
+                for (let i = 0; i < foodList.length; i++) {
+                let item = foodList[i]
+                height += item.clientHeight
+                this.listHeight.push(height)
+                }
+            }
+     },
+ 
        components:{
            selector
        }
@@ -104,37 +167,42 @@
 </script>
 
 <style lang="scss" scoped>
-.menu_body{display: flex; flex: 1;overflow: hidden;}
-    .el-aside,.right{ overflow: scroll;}
-    .el-aside{background: #fff; width: 30%;float: left;border-right: solid 1px #e6e6e6;   position: relative;
+ul{margin: 0;padding: 0}
+.menu_body{ display:flex;
+    position:absolute;
+    top:146px;
+    bottom:50px;
+    width:100%;}
+    .menu-wrapper{background: #fff; width: 30%;float: left; flex:0 0 80px;background: #f5f5f5; overflow: hidden;
    
         ul{width: 100%;
             list-style: none;
             position: relative;
             margin: 0;
-            padding-left: 0;
+            padding-left: 0;   
             li{width: 100%;   
                  height: 40px;
                 line-height: 40px;
-                position: relative;
+                position: relative; background: #f5f5f5;
                 -webkit-box-sizing: border-box;
                 white-space: nowrap;
                 list-style: none;
-               a{ font-size: 12px}
+               span{ font-size: 12px}
             }
+            li.current{background: #fff;}
         }
     }
-    .right {
-      position: relative;width: 70%;float: left;
-      flex: 1;
-      .el-main{
-          article {
-            h3{font-size: 14px; padding: 5px 0;background: #f5f5f5;text-align: left;padding-left: 10px;}
-            section {
+    .foods-wrapper {
+      position: relative;width: 70%;float: left;    overflow: hidden;
+       flex:1 ;
+    
+          .food-list {background: #fff;
+            h3{font-size: 14px;height: 40px;line-height: 40px;background: #f5f5f5;text-align: left;padding-left: 10px;}
+            .food-item {
               display: flex;
               position: relative;
-              margin: 0 10px;
-              padding: 8px 0;
+              margin: 0 0 0 10px;
+              padding: 7px 0;
               border-bottom: 1px solid #f5f5f5;
              .img {
                 margin-right: 1.5rem;
@@ -142,26 +210,26 @@
 
               .info {
                 flex: 1;
-                vertical-align: top;text-align:left;
+                vertical-align: top;text-align:left;padding-left:10px;
                 .name, .price {
                   font-weight: bold;
                 }
                 .name {
-                  font-size: 0.3rem;
+                  font-size:12px;
                 }
                 .sell-num {
-                  font-size: 0.3rem;
+                  font-size:12px;
                   margin: 0.2rem 0;
                 }
                 .price {
                   color: rgb(251, 79, 69);
-                  font-size: 0.4rem;
+                  font-size: 14px;
 
                 }
               }
             }
           }
-        }
+   
 
     }
      

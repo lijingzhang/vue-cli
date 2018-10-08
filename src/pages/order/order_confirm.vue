@@ -2,7 +2,7 @@
 <div>
      <el-container  >
       <v-header title="确认订单">
-         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
     <div  class="comomtips" v-show="loadShow"><i class="el-icon-loading"></i></div>
     <el-main>
@@ -124,7 +124,7 @@ export default{
      
       
          this.all_address() // 默认加载地址
-       
+        
     },
   
     methods:{
@@ -143,14 +143,17 @@ export default{
             });
         },
         submitOrder(){
+            let restaurant_id=this.$route.query.shopid;
             let foods=[];
             let obj= Object.keys(this.dataArr);  //对象转数组
             obj.forEach((key) => {
                 if(Number(key)){
-                    foods.push({skus_id: key,num:this.dataArr[key].num})
+                    foods.push({skus_id: key,num:this.dataArr[key].num});
+                   
                 }
             });
-            postOrder({address_id:this.address.id,restaurant_id:this.$route.query.shopid,foods:foods}).then(res => {
+            
+            postOrder({address_id:this.address.id,restaurant_id:restaurant_id,foods:foods}).then(res => {
                 if(res.data.status==200){
                     this.$router.push({path: '/pay', query: {order_id: res.data.order_id}})
                 }

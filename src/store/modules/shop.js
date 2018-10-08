@@ -1,13 +1,12 @@
 import * as types from '../mutation-types'
-import {getRestaurantInfo,getRestaurantMenu} from '@/api/restaurants'
+import {getRestaurantInfo} from '@/api/restaurants'
 const state={
     shopInfo:{},    //店铺信息  
-   shopMenu:{},   //店铺菜单
 }
 
 const getters={
     shopInfo:state=>state.shopInfo,
-    shopMenu:state=>state.shopMenu,
+
 }
 
 const actions={
@@ -20,14 +19,7 @@ const actions={
             }
         })
     },
-    getRestaurantMenu({commit,state},footid){ //获取店铺menu
-        getRestaurantMenu({footid}).then(res => {
-            if(res.data.status==200){
-                let shopMenu=res.data.data; 
-                commit(types.SHOPMENU,shopMenu)
-            }
-        })
-    },
+  
     
 }
 
@@ -35,9 +27,7 @@ const mutations={
     [types.SHOPINFO](state,shopInfo){  
        state.shopInfo={...shopInfo}   //地址真正赋值给stata.shopInfo
     },
-    [types.SHOPMENU](state,shopMenu){  
-        state.shopMenu={...shopMenu}   
-     }
+   
 }
 
 export default{

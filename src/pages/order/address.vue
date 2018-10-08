@@ -2,7 +2,7 @@
 <div id="popView">
      <el-container  >
       <v-header title="收货地址">
-        <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+        <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
     <el-main>
         <el-row class="p15" v-for="(item,index) in dataArr" :key="item.id" @click.native="selected(item)"  :class="{ selclass:item.id==current}">
@@ -56,7 +56,6 @@ export default{
             this.current=item.id;
             this.$store.dispatch('selectAddr',item) ; //地址信息由vuex管理
             this.$router.go(-1);  
-            console.log(this.current)
         }
       
     }	

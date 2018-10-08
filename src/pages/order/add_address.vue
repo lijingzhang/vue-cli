@@ -7,9 +7,11 @@
     </v-header>
     <el-main>
        	<el-form ref="loginform" :model="form"  label-width="85px" >
-            <el-form-item label="收货地址：" prop="address">
-                <el-input v-model="form.address"  placeholder="点击选择" ></el-input>
-            </el-form-item>
+            <el-form-item label="收货地址：" prop="address" >
+                <router-link to="/addLocation">
+                     <el-input v-model="deliveryAddress"  placeholder="点击选择" ></el-input>
+                </router-link>
+            </el-form-item>  
             <el-form-item label="门牌号：" prop="house_number">
                 <el-input v-model="form.house_number"  placeholder="请输入门牌号：" ></el-input>
             </el-form-item>
@@ -33,13 +35,14 @@
         
         
     </el-main>
-   
+    <router-view></router-view>
      </el-container>
 </div>
 </template>
 
 <script>
   import {add_address} from '@/api/location'
+  import {mapGetters} from 'vuex'
 export default{
 
     data() {
@@ -53,15 +56,22 @@ export default{
             house_number:'',
             gender:''
 
-       }
+       },
+       deliveryAddress:'',
       }
     },
-   
-    created() {
-      
-        
+     computed: {
+      ...mapGetters(['newdeliveryAddress']),
     },
-  
+    created() {
+        this.deliveryAddress=this.newdeliveryAddress.title
+    },
+    watch: {
+      newdeliveryAddress(val) {
+        this.deliveryAddress=val.address.title
+        this.form.address = val.address.address+val.address.title;
+      }
+    },
     methods:{
         subimtForm(formName){
             var formData = JSON.stringify(this.form); // 获取表单数据并转为json数组

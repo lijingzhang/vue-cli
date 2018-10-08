@@ -20,8 +20,8 @@ const actions = {
   reduceCart({commit}, {shopid, food_id}) {        //店铺menu列表页面减少购物车商品
     commit('REDUCE_CART', {shopid, food_id})
   },
-  deleteFood({commit}, {restaurant_id, food_id}) {   //购物车页面删除购物车商品
-    commit('DELETE_CART', {restaurant_id, food_id})
+  deleteFood({commit}, {shopid, food_id}) {   //购物车页面删除购物车商品
+    commit('DELETE_CART', {shopid, food_id})
   },
   // emptyCart({commit}, {restaurant_id}) {
   //   commit('EMPTY_CART', {restaurant_id});
@@ -84,15 +84,15 @@ const mutations = {
  
   // //删除购物车商品
     //删除食物
-    [types.DELETE_CART](state, {restaurant_id, food_id}) {
+    [types.DELETE_CART](state, {shopid,food_id}) {
       let cart = state.cartList;
-      let restaurant = cart[restaurant_id];
+      let restaurant = cart[shopid];
       let num = restaurant[food_id].num;
-      let price = restaurant[food_id].price;
+      let price =  restaurant[food_id].price;
       restaurant.totalNum -= num;
       delete(restaurant[food_id]);
       if (restaurant.totalNum === 0) {
-        delete(cart[restaurant_id]);
+        delete(cart[shopid]);
       } else {
         restaurant.totalPrice = Number((restaurant.totalPrice - price * num).toFixed(2)); //修改价格
       }

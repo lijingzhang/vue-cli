@@ -5,7 +5,8 @@ Vue.component('v-footer',footer); //footer
 import header from './header.vue' //header
 Vue.component('v-header',header); //header
 
-
+import pullrefresh from './pull-refresh.vue' //v-scroll
+Vue.component('v-scroll',pullrefresh); //v-scroll
 
 export default {
     back(){

@@ -181,7 +181,10 @@ display: inline-block;
     font-size: 14px;
     border-radius: 4px;}
 
+.location .el-input__inner{border-radius: 20px }
 
 
+.cart .el-container{ padding-bottom: 0}
+._v-container{top: 0  !important;position: relative !important}
 
-
+.over-flow{ overflow: auto; zoom: 1;}/*zoom1; 是在处理兼容性问题*/

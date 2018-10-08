@@ -22,7 +22,7 @@ export const getRestaurantInfo = (data) =>{
    // 获取餐馆menu
 export const getRestaurantMenu = (data) =>{
     let req = {
-      url:'v1/food/'+data.footid
+      url:'v1/food/'+data
     }
   
     return _get(req)

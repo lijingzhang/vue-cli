@@ -2,7 +2,7 @@
 	<div >
 	<el-container class="pb0" >
         <v-header :title="shopInfo.name">
-			<router-link slot="left"  to="/shopList">返回</router-link>
+			<router-link slot="left"  to="/shopList"><i class="el-icon-arrow-left f16"></i></router-link>
 		</v-header>
         <!-- 头部商家详情 -->
          <el-header>

@@ -2,7 +2,7 @@
 	<div >
 	<el-container  style="height: 100%;margin-top:45px;">
         <v-header title="分类">
-			  <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+			  <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
 		</v-header>
       
       
@@ -120,10 +120,11 @@
                 if(!this.timer) {
                 this.fullHeight = val
                 this.timer = true
-                let that = this
-                setTimeout(function (){
+                let that = this;
+                 setTimeout(() => {
                     that.timer = false
-                },400)
+                }, 1000);
+                
                 }
             }
         }
@@ -184,6 +185,6 @@
         display: inline-block;z-index: 9999;
         .btn{ width: 100%; height: 50px;background: #f7c36d;color: #fff;}
         .el-icon-goods{ font-size: 22px}
-        .el-badge__content{}
+       
 	}
 </style>

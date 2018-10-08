@@ -2,7 +2,7 @@
 <div>
      <el-container  >
       <v-header title="订单详情">
-         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
     <div  class="comomtips" v-show="loadShow"><i class="el-icon-loading"></i></div>
     <el-main>
@@ -52,7 +52,7 @@
               <div><span>支付方式</span><p>在线支付</p></div>
          </div>
     </el-main>
-     <v-footer></v-footer>
+  
      </el-container>
      
 </div>

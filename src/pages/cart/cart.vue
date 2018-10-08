@@ -2,7 +2,7 @@
 <div class="cart">
      <el-container  >
       <v-header title="购物车">
-        <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left"></i></span>
+        <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
         <span slot="right" v-if="!del" @click="del=true">编辑</span>
         <span slot="right" v-else @click="del=false">取消</span>
     </v-header>
@@ -49,6 +49,7 @@
         
     </el-main>
      	<footer v-show="del"><el-button type="primary" class="w100" @click.native="delSelct()">删除</el-button></footer>
+         
      </el-container>
 </div>
 </template>
@@ -144,14 +145,14 @@ export default{
         },
        delSelct(){  //选中删除：思路要删除购物车页面选中的食物selectFood和购物车缓存的食物cartList
            let selectFood=this.selectFood
-                Object.keys(this.selectFood).forEach(restaurant_id => {
-                    let deletfood=this.selectFood[restaurant_id]
+                Object.keys(this.selectFood).forEach(shopid => {
+                    let deletfood=this.selectFood[shopid]
                      Object.keys(deletfood).forEach(food_id => {
                         if (Number(food_id)&&deletfood[food_id]) {  //判断是食物数组并且是被选中的状态deletfood[food_id]==true
-                            this.$store.dispatch('deleteFood', {restaurant_id, food_id})  //参数要统一传过去；删除cartList的食物
-                            delete this.selectFood[restaurant_id][food_id];      //删除购物车页面食物
+                            this.$store.dispatch('deleteFood', {shopid, food_id})  //参数要统一传过去；删除cartList的食物
+                            delete this.selectFood[shopid][food_id];      //删除购物车页面食物
                              //删除购物车页面食物后剩余物品的总价格
-                             this.selectFood[restaurant_id]['totalPrice'] =0;
+                             this.selectFood[shopid]['totalPrice'] =0;
                          }
                     })
                  })
@@ -195,14 +196,9 @@ export default{
                     foods[shopid]['totalNum']+=food.num;
                     foods[shopid]['shopname']=this.cartList[shopid].shopname;
                     foods[shopid]['pic_url']=this.cartList[shopid].pic_url;
-                    this.$store.dispatch('reduceCart', {
-                        food_id: key,
-                        shopid: shopid,
-                    })
+                   
                 }
             })
-        //    console.log(foods)
-         
                
             localStorage.setItem('confirmOrder', JSON.stringify(foods));
 
