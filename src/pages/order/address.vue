@@ -1,6 +1,6 @@
 <template>
 <div id="popView">
-     <el-container  >
+     <div >
       <v-header title="收货地址">
         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
@@ -19,7 +19,7 @@
    	<footer>
 		  <router-link to="/add_address"><el-button type="primary" class="w100 f18"><i class="el-icon-circle-plus-outline "></i> 新增收货地址</el-button></router-link>
 	</footer>
-     </el-container>
+     </div>
 </div>
 </template>
 

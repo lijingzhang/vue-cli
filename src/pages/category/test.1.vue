@@ -50,8 +50,7 @@
             </el-row>
         </div>
          <div class="recommend">
-            
-     <scroll ref="scroll" class="recommend-content" :data="dataArr"  :pulldown="pulldown"  @pulldown="loadData" :pullup="pullup"  @pullup="loadmore">
+     <scroll ref="scroll" class="recommend-content" :data="dataArr">
        <div>
          <div class="recommend-list">
            <ul>
@@ -73,8 +72,6 @@
              </li>
            </ul>
          </div>
-         <div v-show="nomore" class="tc p15">到底啦</div>
-         <div v-show="loading&&!nomore">正在努力加载中…</div>
        </div>
      </scroll>
    </div>
@@ -97,15 +94,16 @@
     data() {
       return {
         dataArr: [],         //商家列表
+        showSort: false,      //显示选择排序列表
+        BScrollEvent: null,   //better-scroll实例
+        loading: false,       //加载更多
         page: 1,               //当前餐馆列表加载到第几页
-        limit:4,              //每次拉的餐馆数量
-        offset:0,               //当前显示的总数量
+        limit: 4,              //每次拉去的餐馆数量
+        noMore: false,        //没有更多数据了
+        preventRepeat: false,   //避免重复请求
         loadShow:true,
         totalNum:0,
-         pulldown: true,
-         pullup:true,
-        loading: false,       //加载更多
-        nomore: false,       //到底啦
+        scrollWrapper: null,    //存放 scrollWrapper这个DOM元素 用于等附近商家列表加载后 初始化better-scroll
       }
     },
     computed: {
@@ -117,7 +115,7 @@
         this.lat=lat;
         this.lng=lng;
         this.dataArr = [];
-        this.loadData();
+        this.Restaurants();
       } else {
         this.$store.dispatch('locationAddr');
       }
@@ -132,58 +130,30 @@
         this.totalNum=num
     },
      methods: {
-  	 loadData() {
-        this.loading=false;  //下拉后初始化
-        this.nomore=false;   
-        this.pullup=true;
-        this.page=1;
-        this.loadShow=true;
-        let limit=this.limit;
-        let offset=this.offset;
+  	 Restaurants() {
+        if (this.noMore || this.preventRepeat)
+          return;
+        this.preventRepeat = true;
+        let limit=0;
+        let offset=0;
         let lat=this.lat;
          let lng=this.lng;
          getRestaurants({limit,offset,lng,lat}).then(res => {
               this.loadShow=false;
                 this.dataArr=res.data.data; //获取店铺列表
-               
+            
             }).catch((err) => {   //显示异常
                 console.log(err);
             });
 
     },
-    loadmore(){
-          if (!this.loading) {   //避免加载过程中 重复请求
-            this.loading = true;
-            this.loadShow=true;
-            let offset=this.limit* this.page;
-             let limit=this.limit;
-              this.page++;
-            let lat=this.lat;
-            let lng=this.lng;
-            getRestaurants({limit,offset,lng,lat}).then(res => {
-              
-                this.loadShow=false;
-                 res.data.data.forEach((el) => {
-                  this.dataArr.push(el);
-                });
-                if(limit>res.data.data.length){  //数组长度小于每页加载的数量时表示已经加载完全部
-                    this.loading = true;
-                    this.pullup=false;
-                    this.nomore=true;
-                }
-                else{this.loading = false;}
-            })
-       
-    
-   
-         }
-        },
-     },
+    },
     watch: {
        address(address) {  //监听地址为空时重定位之后重新加载列表
+       console.log(address)
         this.lat=address.lat;
         this.lng=address.lng;
-        this.loadData()
+        this.Restaurants()
       }
       }	,
   components: {

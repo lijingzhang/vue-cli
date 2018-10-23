@@ -19,8 +19,9 @@
 @media (min-width: 420px){
     html{font-size:16px;}
 }
-body{margin: 0;color: #333; background: #f0eff5;}
-#app{   margin-top: 45px !important;}
+html{height: 100%;}
+body{margin: 0;color: #333; background: #f0eff5;height: 100%;}
+#app{   margin-top: 0 !important;height: 100%;}
 a{ color: #333; text-decoration: none}
 @for $i from 1 through 60 { .mt#{$i} { margin-top: 1px * $i; } }
 @for $i from 1 through 60 { .mb#{$i} { margin-bottom: 1px * $i; } }
@@ -39,7 +40,7 @@ input::-webkit-inner-spin-button{
     -webkit-appearance: none !important;  
     margin: 0;  
 }
-h1,h2,h3,h4,p{margin: 0 ;padding: 0}
+h1,h2,h3,h4,p,ul{margin: 0 ;padding: 0}
 .l{ float: left;}
 .r{ float: right;}
 .gray{ color: #999}
@@ -84,7 +85,7 @@ h1,h2,h3,h4,p{margin: 0 ;padding: 0}
     border-color: #f6daac;
 }
 .el-button--primary{background: #f7c36d; border: 1px solid #f7c36d}
-.el-container{  padding-bottom:56px;}
+.el-container{  padding-bottom:56px;    padding-top: 45px;}
 .el-main{padding: 0; position: relative;  background: #fff}
 .el-form-item{ margin-bottom: 0;    border-bottom: 1px solid #dcdfe6; border-top:0}
 .el-form .el-form-item:first-child{ border-top: 1px solid #dcdfe6; }
@@ -188,3 +189,4 @@ display: inline-block;
 ._v-container{top: 0  !important;position: relative !important}
 
 .over-flow{ overflow: auto; zoom: 1;}/*zoom1; 是在处理兼容性问题*/
+

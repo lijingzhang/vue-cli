@@ -1,3 +1,4 @@
+
 <template>
 <div>
      <el-container  >
@@ -48,10 +49,14 @@
                 </el-col>
             </el-row>
         </div>
-         <div ref="scrollWrapper">
-        <article >
-                <section v-for="(item,id) in dataArr" :key="item.id">
-                    <router-link :to="{path:'/menu',query:{id:item.id}}">
+         <div class="recommend">
+            
+     <scroll ref="scroll" class="recommend-content" :data="dataArr"  :pulldown="pulldown"  @pulldown="loadData" :pullup="pullup"  @pullup="loadmore">
+       <div>
+         <div class="recommend-list">
+           <ul>
+             <li v-for="(item,index) in dataArr" class="item" :key="index">
+                <router-link :to="{path:'/menu',query:{id:item.id}}">
                     <div class="img">
                         <img  :src="item.pic_url">
                     </div>
@@ -64,11 +69,15 @@
                         </div>
                     
                     </div>
-                    </router-link>
-                </section>
-                
-            </article>
-            </div>
+                </router-link>
+             </li>
+           </ul>
+         </div>
+         <div v-show="nomore" class="tc p15">到底啦</div>
+         <div v-show="loading&&!nomore">正在努力加载中…</div>
+       </div>
+     </scroll>
+   </div>
     </el-main>
     <v-footer></v-footer>
   <!-- 购物车图标 -->
@@ -79,8 +88,8 @@
 </div>
 </template>
 
-<script>
-  import BScroll from 'better-scroll'
+<script >
+ import Scroll from '../../components/scroll'
   import {getRestaurants} from '@/api/restaurants'
   import {mapGetters} from 'vuex'
 
@@ -88,33 +97,27 @@
     data() {
       return {
         dataArr: [],         //商家列表
-        showSort: false,      //显示选择排序列表
-        BScrollEvent: null,   //better-scroll实例
-        loading: false,       //加载更多
         page: 1,               //当前餐馆列表加载到第几页
-        limit: 4,              //每次拉去的餐馆数量
-        noMore: false,        //没有更多数据了
-        preventRepeat: false,   //避免重复请求
+        limit:4,              //每次拉的餐馆数量
+        offset:0,               //当前显示的总数量
         loadShow:true,
         totalNum:0,
-        scrollWrapper: null,    //存放 scrollWrapper这个DOM元素 用于等附近商家列表加载后 初始化better-scroll
+         pulldown: true,
+         pullup:true,
+        loading: false,       //加载更多
+        nomore: false,       //到底啦
       }
     },
     computed: {
       ...mapGetters(['address','cartList']), 
     },
-       mounted() {
-       
-    },
-   
-    created() {
-        console.log( this.address)
+  created() {
       let {lat, lng} = this.address;
       if (lat && lng) {
         this.lat=lat;
         this.lng=lng;
         this.dataArr = [];
-        this.Restaurants();
+        this.loadData();
       } else {
         this.$store.dispatch('locationAddr');
       }
@@ -129,40 +132,79 @@
         this.totalNum=num
     },
      methods: {
-  	 Restaurants() {
-        if (this.noMore || this.preventRepeat)
-          return;
-        this.preventRepeat = true;
-        let limit=0;
-        let offset=0;
+  	 loadData() {
+        this.loading=false;  //下拉后初始化
+        this.nomore=false;   
+        this.pullup=true;
+        this.page=1;
+        this.loadShow=true;
+        let limit=this.limit;
+        let offset=this.offset;
         let lat=this.lat;
          let lng=this.lng;
          getRestaurants({limit,offset,lng,lat}).then(res => {
               this.loadShow=false;
                 this.dataArr=res.data.data; //获取店铺列表
-            
+               
             }).catch((err) => {   //显示异常
                 console.log(err);
             });
 
     },
-    },
+    loadmore(){
+          if (!this.loading) {   //避免加载过程中 重复请求
+            this.loading = true;
+            this.loadShow=true;
+            let offset=this.limit* this.page;
+             let limit=this.limit;
+              this.page++;
+            let lat=this.lat;
+            let lng=this.lng;
+            getRestaurants({limit,offset,lng,lat}).then(res => {
+              
+                this.loadShow=false;
+                 res.data.data.forEach((el) => {
+                  this.dataArr.push(el);
+                });
+                if(limit>res.data.data.length){  //数组长度小于每页加载的数量时表示已经加载完全部
+                    this.loading = true;
+                    this.pullup=false;
+                    this.nomore=true;
+                }
+                else{this.loading = false;}
+            })
+       
+    
+   
+         }
+        },
+     },
     watch: {
        address(address) {  //监听地址为空时重定位之后重新加载列表
-       console.log(address)
         this.lat=address.lat;
         this.lng=address.lng;
-        this.Restaurants()
+        this.loadData()
       }
       }	,
+  components: {
+    Scroll
   }
+}
 </script>
-
-<style lang="scss" scoped>
+<style scoped lang="scss" >
 @function imgpx($px) {
     @return $px / 75px * 1rem;
 }
-      article {
+  .recommend{
+    position: fixed;
+    width: 100%;
+    top: 150px;background: #fff;
+    bottom: 55px;
+    .recommend-content{
+      height: 100%;
+      overflow: hidden;
+     
+      .recommend-list{
             a {
               display: flex;
               position: relative;
@@ -190,15 +232,18 @@
                 }
                 .price {
                   color: rgb(251, 79, 69);
-                  font-size: 0.4rem;
+                  font-size: 14px;
 
                 }
                 .el-icon-circle-plus{ color: #f7c36d; font-size: 22px; margin-right: 5px}
                 .el-icon-remove{ color: #999; font-size: 22px; margin-right: 5px}
               }
             }
-          }
-     .cart{ position: fixed;right: 10px;bottom: 15%;border: 1px solid #999;border-radius: 50%;display: inline-block;padding:8px;background:#fff;
+      }
+     
+    }
+  }
+  .cart{ position: fixed;right: 10px;bottom: 15%;border: 1px solid #999;border-radius: 50%;display: inline-block;padding:8px;background:#fff;
         i{display: inline-block; width: 30px;height: 30px;background: url('../../assets/images/cart.png') no-repeat;
        background-size: contain;vertical-align:middle
         }

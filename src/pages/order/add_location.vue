@@ -1,6 +1,6 @@
 <template>
 <div id="popView">
-     <el-container  >
+     <div >
       <v-header title="选择收货地址">
         <span slot="left"  @click="$common.back()"><i class="el-icon-arrow-left f16"></i></span>
     </v-header>
@@ -28,7 +28,7 @@
         </div> -->
     </el-main>
    
-     </el-container>
+     </div>
 </div>
 </template>
 
